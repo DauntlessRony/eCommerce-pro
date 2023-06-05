@@ -1,0 +1,69 @@
+{% load static %}
+{% load cart_count %}
+{% load cart_summary %}
+
+
+<div class="minicart-right-drawer right modal fade" id="minicart-drawer" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="minicart-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i class="an an-times" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="left" title="Close"></i></button>
+                <h4 class="modal-title" id="myModalLabel2">Shopping Cart <strong>{{ request.user|cart_product_count }}</strong> items</h4>
+            </div>
+            <div class="minicart-body">
+                <div class="empty-cart">
+                    <p>You have no items in your shopping cart.</p>
+                </div>
+                <div id="drawer-minicart" class="block block-cart">
+                    <ul class="mini-products-list">
+                        {% for x in order.products.all %}
+                        <li class="item">
+                            <a class="product-image" href="cart.html"><img src="{{ x.product.image.url }}" alt="Frayed Layered Sleeve" title=""></a>
+                            <div class="product-details">
+                                <a href="#" class="remove" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove"><i class="an an-times" aria-hidden="true"></i></a>
+                                <a href="#" class="edit-i remove" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="an an-edit" aria-hidden="true"></i></a>
+                                <a class="pName" href="cart.html">{{ x.product.name }}</a>
+                                <div class="variant-cart">Red / XL</div>
+                                <div class="wrapQtyBtn clearfix">
+                                    <span class="label">Qty:</span>
+                                    <div class="qtyField clearfix">
+                                        <a class="qtyBtn minus" href="{% url 'cart_quantity_decrement' x.product.pk %}"><i class="an an-minus" aria-hidden="true"></i></a>
+                                        <input type="text" name="quantity" value="1" class="product-form__input qty">
+                                        <a class="qtyBtn plus" href="{% url 'cart_quantity_increment' x.product.pk %}"><i class="an an-plus" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                                {% if x.product.discount_price %}
+                                <div class="priceRow clearfix">
+                                    <div class="product-price">
+                                        <span class="money">${{ x.product.discount_price }}</span>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="priceRow clearfix">
+                                    <div class="product-price">
+                                        <span class="money">${{ x.product.regular_price }}</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="minicart-footer minicart-action">
+                <div class="total-in">
+                    <p class="label"><b>Subtotal:</b><span class="item product-price"><span class="money">$427.00</span></span></p>
+                    <p class="label"><b>Shipping:</b><span class="item product-price"><span class="shipping">$10.00</span></span></p>
+                    <p class="label"><b>Tax:</b><span class="item product-price"><span class="tax">$0.00</span></span></p>
+                    <p class="label"><b>Total:</b><span class="item product-price"><span class="totals">$437.00</span></span></p>
+                </div>
+                <div class="buttonSet d-flex flex-row align-items-center text-center">
+                    <a href="{% url 'cart_summary' %}" class="btn btn-secondary w-50 me-3">View Cart</a>
+                    <a href="checkout.html" class="btn btn-secondary w-50">Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
